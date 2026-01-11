@@ -5,12 +5,57 @@ return {
 
   -- This is a good place to do further customize the options set by the community plugins/packs
 
+  -- astrocommunity.completion.copilot*
+  {
+    "saghen/blink.cmp",
+    dependencies = {
+      {
+        "zbirenbaum/copilot.lua",
+        opts = function()
+          local function curr_file() return vim.fs.basename(vim.api.nvim_buf_get_name(0)) end
+          local filetypes = {
+            yaml = true,
+            markdown = true,
+            -- Disable for `.env` files.
+            sh = function() return not string.match(vim.fs.basename(curr_file()), "^%.env.*") end,
+            -- HACK: Disable for kitty config files to prevent Copilot LSP errors.
+            conf = function() return vim.fs.dirname(curr_file()):match("kitty$") end,
+          }
+          local force_enabled_fts = { "gitcommit", "hgcommit" }
+          for _, ft in ipairs(force_enabled_fts) do
+            filetypes[ft] = true
+          end
+          return {
+            should_attach = function()
+              return vim.list_contains(force_enabled_fts, vim.bo.filetype)
+                or (vim.bo.buflisted and vim.bo.buftype == "")
+            end,
+            suggestion = { enabled = false },
+            panel = { enabled = false },
+            filetypes = filetypes,
+          }
+        end,
+      },
+      { "giuxtaposition/blink-cmp-copilot", lazy = true },
+    },
+    opts = function(_, opts)
+      opts.sources.default =
+        require("astrocore").list_insert_unique(opts.sources.default, { "copilot" })
+      opts.sources.providers.copilot = {
+        name = "copilot",
+        module = "blink-cmp-copilot",
+        score_offset = 100,
+        async = true,
+      }
+    end,
+  },
+
   -- astrocommunity.diagnostics.trouble-nvim
   {
     "folke/trouble.nvim",
     keys = {
-      { "<Leader>xr", "<Cmd>Trouble lsp toggle<Cr>", desc = "Trouble LSP References" },
-      { "<Leader>xs", "<Cmd>Trouble symbols toggle<Cr>", desc = "Trouble LSP Symbols" },
+      { "<Leader>xr", "<CMD>Trouble lsp toggle<CR>", desc = "Trouble LSP References" },
+      { "<Leader>xs", "<CMD>Trouble symbols toggle<CR>", desc = "Trouble LSP Symbols" },
     },
   },
 
@@ -36,7 +81,7 @@ return {
   {
     "toppair/peek.nvim",
     keys = {
-      { "<Leader>lp", "<Cmd>PeekToggle<Cr>", desc = "Toggle Preview", ft = "markdown" },
+      { "<Leader>lp", "<CMD>PeekToggle<CR>", desc = "Toggle Preview", ft = "markdown" },
     },
     config = function()
       local peek = require("peek")
@@ -48,27 +93,20 @@ return {
     end,
   },
 
-  -- astrocommunity.motion.flash-nvim
+  -- astrocommunity.motion.leap-nvim
   {
-    "folke/flash.nvim",
+    "ggandor/leap.nvim",
     specs = {
       {
         "AstroNvim/astrocore",
         opts = function(_, opts)
           local m = opts.mappings
+          local forward = { "<Plug>(leap-forward)", desc = "Leap forward" }
+          local backward = { "<Plug>(leap-backward)", desc = "Leap backward" }
+          local from_window = { "<Plug>(leap-from-window)", desc = "Leap from window" }
 
-          local jump = { function() require("flash").jump() end, desc = "Flash" }
-          local treesitter = {
-            function() require("flash").treesitter() end,
-            desc = "Flash Treesitter",
-          }
-          local from_window = {
-            function() require("flash").jump { search = { multi_window = true } } end,
-            desc = "Flash from window",
-          }
-
-          m.n.s, m.x.x, m.o.x = jump, jump, jump
-          m.n.S, m.x.X, m.o.X = treesitter, treesitter, treesitter
+          m.n.s, m.x.x, m.o.x = forward, forward, forward
+          m.n.S, m.x.X, m.o.X = backward, backward, backward
           m.n.gs, m.x.gs, m.o.gs = from_window, from_window, from_window
 
           -- The following default keybindings conflict with `nvim-surround`,
@@ -80,24 +118,15 @@ return {
     },
   },
 
-  -- astrocommunity.motion.nvim-spider
-  {
-    "chrisgrieser/nvim-spider",
-    dependencies = {
-      -- FIXME: `b` is no longer working with newer versions of `luautf8`. Disabling UTF-8 support for now.
-      -- Fixer la détection des mots non-ASCII.
-      -- https://github.com/chrisgrieser/nvim-spider?tab=readme-ov-file#utf-8-support
-      -- { "rami3l/nvim-spider-utf8", build = "rockspec" },
-    },
-    opts = {
-      skipInsignificantPunctuation = false,
-    },
-  },
-
   -- astrocommunity.test.neotest
   {
     "nvim-neotest/neotest",
     keys = {
+      {
+        "<Leader>Te",
+        function() require("neotest").summary.toggle() end,
+        desc = "Toggle summary",
+      },
       {
         "<Leader>To",
         function() require("neotest").output.open { enter = true } end,

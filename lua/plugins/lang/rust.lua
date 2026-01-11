@@ -10,12 +10,7 @@ return {
   },
   {
     "Olical/conjure",
-    dependencies = {
-      {
-        "AstroNvim/astrocore",
-        opts = { options = { g = { ["conjure#filetype#rust"] = false } } },
-      },
-    },
+    ft = function(_, ft) return require("../utils").list_remove_all(ft, { "rust" }) end,
   },
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",

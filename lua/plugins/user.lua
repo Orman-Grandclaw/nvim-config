@@ -8,24 +8,16 @@ return {
   -- UX enhancements
   {
     "chrisgrieser/nvim-various-textobjs",
-    event = "User AstroFile",
-    opts = {
-      keymaps = {
-        useDefaults = true,
-        -- NOTE: Avoids conflicts with Vim's "format" functionality.
-        -- It seems that `gw` is preferred over `gq` now.
-        -- See: <https://www.douglasdrumond.tech/post/2024-11-04-g-format>
-        disabledDefaults = { "gw", "gW" },
-      },
-    },
+    event = "User Astrofile",
+    opts = { keymaps = { useDefaults = true } },
   },
 
   {
     "mizlan/iswap.nvim",
     event = "VeryLazy",
     keys = {
-      { "<Leader>rx", "<Cmd>ISwapWith<Cr>", desc = "Exchange syntax node" },
-      { "<Leader>rX", "<Cmd>IMoveWith<Cr>", desc = "Shift syntax node" },
+      { "<Leader>rx", "<CMD>ISwapWith<CR>", desc = "Exchange syntax node" },
+      { "<Leader>rX", "<CMD>IMoveWith<CR>", desc = "Shift syntax node" },
     },
     specs = {
       {
@@ -41,7 +33,7 @@ return {
 
   {
     "keaising/im-select.nvim",
-    event = "User AstroFile",
+    event = "User Astrofile",
     opts = function(_, opts)
       if vim.fn.has("macunix") == 1 then
         opts.default_im_select = "com.apple.keylayout.US"

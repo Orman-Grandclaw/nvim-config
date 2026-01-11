@@ -32,7 +32,7 @@ return {
         signcolumn = "yes",
         wrap = true,
         termguicolors = true, -- enable rich text
-        clipboard = "", -- set to "unnamedplus" to link to the system clipboard
+        clipboard = "unnamedplus", -- set to "unnamedplus" to link to the system clipboard
         spell = false,
         spelllang = "en,fr,cjk",
         spelloptions = "camel",

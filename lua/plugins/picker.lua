@@ -10,7 +10,7 @@ return {
     ---@diagnostic disable-next-line: undefined-field
     { "g?", function() require("snacks.picker").todo_comments() end, desc = "Search todos" },
     {
-      "<Leader>/",
+      "<Leader>.",
       function() require("snacks.picker").lines() end,
       desc = "Find words in buffer",
     },
@@ -29,37 +29,33 @@ return {
       function() require("snacks.picker").files { hidden = true, ignored = true } end,
       desc = "Find all files",
     },
-    {
-      "<Leader>lc",
-      function() require("snacks.picker").lsp_outgoing_calls() end,
-      desc = "Find outgoing calls",
-    },
-    {
-      "<Leader>lC",
-      function() require("snacks.picker").lsp_incoming_calls() end,
-      desc = "Find incoming calls",
-    },
-
-    -- GitHub issues and PRs
-    {
-      "<leader>gi",
-      function() require("snacks.picker").gh_issue() end,
-      desc = "GitHub Issues (open)",
-    },
-    {
-      "<leader>gI",
-      function() require("snacks.picker").gh_issue { state = "all" } end,
-      desc = "GitHub Issues (all)",
-    },
-    {
-      "<leader>gp",
-      function() require("snacks.picker").gh_pr() end,
-      desc = "GitHub Pull Requests (open)",
-    },
-    {
-      "<leader>gP",
-      function() require("snacks.picker").gh_pr { state = "all" } end,
-      desc = "GitHub Pull Requests (all)",
-    },
   },
 }
+-- TODO: Find hierarchy UI replacement for `snacks`.
+-- {
+--   "jmacadie/telescope-hierarchy.nvim",
+--   dependencies = {
+--     {
+--       "AstroNvim/astrolsp",
+--       ---@type AstroLSPOpts
+--       opts = {
+--         mappings = {
+--           n = {
+--             ["<Leader>lc"] = {
+--               "<CMD>Telescope hierarchy outgoing_calls<CR>",
+--               desc = "Search outgoing calls",
+--             },
+--             ["<Leader>lC"] = {
+--               "<CMD>Telescope hierarchy incoming_calls<CR>",
+--               desc = "Search incoming calls",
+--             },
+--           },
+--         },
+--       },
+--     },
+--   },
+--   config = function(plugin, opts)
+--     require("astronvim.plugins.configs.telescope")(plugin, opts)
+--     require("telescope").load_extension("hierarchy")
+--   end,
+-- },

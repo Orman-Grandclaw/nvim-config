@@ -6,7 +6,7 @@ return {
       name = { "venv", ".venv" },
     },
     keys = {
-      { "<Leader>lv", "<Cmd>VenvSelect<Cr>", desc = "Select Venv", ft = "python" },
+      { "<Leader>lv", "<CMD>VenvSelect<CR>", desc = "Select Venv", ft = "python" },
     },
     specs = {
       { "nvim-telescope/telescope.nvim", enabled = false },
@@ -28,8 +28,20 @@ return {
             -- https://github.com/DetachHead/basedpyright/blob/main/docs/configuration/language-server-settings.md
             basedpyright = {
               analysis = {
+                autoImportCompletions = true,
+                autoSearchPaths = true,
+                completeFunctionParens = true,
                 diagnosticMode = "workspace",
+                strictSetInference = true,
+                stubPath = "./typings",
                 typeCheckingMode = "strict",
+                useLibraryCodeForTypes = true,
+
+                inlayHints = {
+                  functionReturnTypes = true,
+                  pytestParameters = true,
+                  variableTypes = true,
+                },
               },
             },
           },

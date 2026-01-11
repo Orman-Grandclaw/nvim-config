@@ -13,21 +13,9 @@ local function visible_bufs(tabpage)
   return buf_set
 end
 
-local function window_zoom_toggle()
-  if vim.fn.exists("t:zoomed") == 1 and vim.t.zoomed == 1 then
-    vim.cmd("execute t:zoom_winrestcmd")
-    vim.t.zoomed = 0
-  else
-    vim.t.zoom_winrestcmd = vim.fn.winrestcmd()
-    vim.cmd("resize")
-    vim.cmd("vertical resize")
-    vim.t.zoomed = 1
-  end
-end
-
 ---@type AstroCoreMappings
 return {
-  -- The first key is the mode, the second key is the left-hand side of the map.
+  -- The first key is the mode, the second key is the lefthand side of the map.
   -- See <https://neovim.io/doc/user/map.html#%3Amap-modes> for all possible modes.
 
   [""] = {
@@ -44,7 +32,7 @@ return {
     ["<LocalLeader>D"] = { [["_D]], desc = "Delete till NL w/o cut" },
     ["<LocalLeader>Y"] = { [["+Y]], desc = "Yank line to clipboard" },
 
-    ["<Leader>W"] = { "<Cmd>noautocmd w<Cr>", desc = "Save w/o autocmds" },
+    ["<Leader>W"] = { "<CMD>noautocmd w<CR>", desc = "Save w/o autocmds" },
 
     ["<Leader>bc"] = {
       function()
@@ -57,22 +45,34 @@ return {
       desc = "Close invisible buffers",
     },
 
-    ["<C-w>z"] = { window_zoom_toggle, desc = "Zoom window" },
-    ["<C-w><C-z>"] = { window_zoom_toggle, desc = "Zoom window" },
+    ["<Leader>bz"] = {
+      function()
+        if vim.fn.exists("t:zoomed") == 1 and vim.t.zoomed == 1 then
+          vim.cmd("execute t:zoom_winrestcmd")
+          vim.t.zoomed = 0
+        else
+          vim.t.zoom_winrestcmd = vim.fn.winrestcmd()
+          vim.cmd("resize")
+          vim.cmd("vertical resize")
+          vim.t.zoomed = 1
+        end
+      end,
+      desc = "Zoom buffer",
+    },
 
     ["<Leader><Tab>"] = { desc = "󰌒 " .. "Tabs" },
-    ["<Leader><Tab><Tab>"] = { "<Cmd>tabnew<Cr>", desc = "New tab" },
-    ["<Leader><Tab>["] = { "<Cmd>tabprevious<Cr>", desc = "Previous tab" },
-    ["<Leader><Tab>]"] = { "<Cmd>tabnext<Cr>", desc = "Next tab" },
-    ["<Leader><Tab>c"] = { "<Cmd>tabclose<Cr>", desc = "Close tab" },
-    ["<Leader><Tab>f"] = { "<Cmd>tabfirst<Cr>", desc = "First tab" },
-    ["<Leader><Tab>l"] = { "<Cmd>tablast<Cr>", desc = "Last tab" },
-    ["<Leader><Tab>o"] = { "<Cmd>tabonly<Cr>", desc = "Close other tabs" },
+    ["<Leader><Tab><Tab>"] = { "<CMD>tabnew<CR>", desc = "New tab" },
+    ["<Leader><Tab>["] = { "<CMD>tabprevious<CR>", desc = "Previous tab" },
+    ["<Leader><Tab>]"] = { "<CMD>tabnext<CR>", desc = "Next tab" },
+    ["<Leader><Tab>c"] = { "<CMD>tabclose<CR>", desc = "Close tab" },
+    ["<Leader><Tab>f"] = { "<CMD>tabfirst<CR>", desc = "First tab" },
+    ["<Leader><Tab>l"] = { "<CMD>tablast<CR>", desc = "Last tab" },
+    ["<Leader><Tab>o"] = { "<CMD>tabonly<CR>", desc = "Close other tabs" },
   },
 
   v = {
-    ["<Leader>sz"] = { [[:sort i<Cr>]], desc = "Sort lines" },
-    ["<Leader>sZ"] = { [[:sort! i<Cr>]], desc = "Sort lines (rev)" },
+    ["<Leader>sz"] = { [[:sort i<CR>]], desc = "Sort lines" },
+    ["<Leader>sZ"] = { [[:sort! i<CR>]], desc = "Sort lines (rev)" },
   },
 
   x = {
@@ -94,6 +94,6 @@ return {
 
   t = {
     -- setting a mapping to false will disable it
-    -- ["<Esc>"] = false,
+    -- ["<esc>"] = false,
   },
 }
