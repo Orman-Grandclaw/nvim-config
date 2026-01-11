@@ -3,13 +3,6 @@
 ---@type LazySpec
 return {
   "AstroNvim/astrolsp",
-  init = function()
-    vim.filetype.add({
-      extension = {
-        mojo = "mojo",
-      },
-    })
-  end,
   ---@type AstroLSPOpts
   opts = {
     features = {
@@ -24,10 +17,6 @@ return {
     formatting = {
       format_on_save = { enabled = true },
       timeout_ms = 1000,
-    },
-
-    servers = {
-      "mojo",
     },
 
     ---@diagnostic disable: missing-fields
